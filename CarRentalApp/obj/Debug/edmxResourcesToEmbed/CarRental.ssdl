@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CarReantal_Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="CarRental_Records">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CustomerName" Type="nvarchar" MaxLength="100" />
+    <Property Name="DateRented" Type="datetime" />
+    <Property Name="DateReturned" Type="datetime" />
+    <Property Name="Cost" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="TypeOfCarId" Type="int" />
+  </EntityType>
+  <EntityType Name="CarRental_Roles">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Shortname" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="CarRental_TypesOfCars">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Year" Type="int" />
+    <Property Name="Make" Type="nvarchar" MaxLength="50" />
+    <Property Name="Model" Type="nvarchar" MaxLength="50" />
+    <Property Name="Vin" Type="nvarchar" MaxLength="50" />
+    <Property Name="LicensePlateNumber" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="CarRental_UserRoles">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userId" Type="int" />
+    <Property Name="roleId" Type="int" />
+  </EntityType>
+  <EntityType Name="CarRental_Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="username" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="password" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_CarRentalRecord_TypesOfCars">
+    <End Role="CarRental_TypesOfCars" Type="Self.CarRental_TypesOfCars" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="CarRental_Records" Type="Self.CarRental_Records" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CarRental_TypesOfCars">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CarRental_Records">
+        <PropertyRef Name="TypeOfCarId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserRoles_CarRentalUsers">
+    <End Role="CarRental_Users" Type="Self.CarRental_Users" Multiplicity="0..1" />
+    <End Role="CarRental_UserRoles" Type="Self.CarRental_UserRoles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CarRental_Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CarRental_UserRoles">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserRoles_Roles">
+    <End Role="CarRental_Roles" Type="Self.CarRental_Roles" Multiplicity="0..1" />
+    <End Role="CarRental_UserRoles" Type="Self.CarRental_UserRoles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CarRental_Roles">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CarRental_UserRoles">
+        <PropertyRef Name="roleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CarReantal_ModelStoreContainer">
+    <EntitySet Name="CarRental_Records" EntityType="Self.CarRental_Records" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CarRental_Roles" EntityType="Self.CarRental_Roles" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CarRental_TypesOfCars" EntityType="Self.CarRental_TypesOfCars" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CarRental_UserRoles" EntityType="Self.CarRental_UserRoles" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CarRental_Users" EntityType="Self.CarRental_Users" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_CarRentalRecord_TypesOfCars" Association="Self.FK_CarRentalRecord_TypesOfCars">
+      <End Role="CarRental_TypesOfCars" EntitySet="CarRental_TypesOfCars" />
+      <End Role="CarRental_Records" EntitySet="CarRental_Records" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserRoles_CarRentalUsers" Association="Self.FK_UserRoles_CarRentalUsers">
+      <End Role="CarRental_Users" EntitySet="CarRental_Users" />
+      <End Role="CarRental_UserRoles" EntitySet="CarRental_UserRoles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserRoles_Roles" Association="Self.FK_UserRoles_Roles">
+      <End Role="CarRental_Roles" EntitySet="CarRental_Roles" />
+      <End Role="CarRental_UserRoles" EntitySet="CarRental_UserRoles" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
